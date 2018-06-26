@@ -157,12 +157,27 @@ def _token_set(s1, s2, partial=True, force_ascii=True, full_process=True):
     else:
         ratio_func = ratio
 
-    pairwise = [
-        ratio_func(sorted_sect, combined_1to2),
-        ratio_func(sorted_sect, combined_2to1),
-        ratio_func(combined_1to2, combined_2to1)
-    ]
-    return max(pairwise)
+    """
+    Modifications:
+    
+    String to match may be "brown sugar, firmly packed"
+    Possible ingredient references to match with may be "sugar," "brown sugar"
+    We want to match with "brown sugar"
+    
+    So we don't care about similarity between the intersection and combined token lists,
+    because the intersection will always be identical (perfect match) to the "combined"
+    token list for the reference ingredient. Instead, we care about similarity between
+    both combined token lists.
+    """
+
+    # pairwise = [
+    #     ratio_func(sorted_sect, combined_1to2),
+    #     ratio_func(sorted_sect, combined_2to1),
+    #     ratio_func(combined_1to2, combined_2to1)
+    # ]
+    # return max(pairwise)
+
+    return ratio_func(combined_1to2, combined_2to1)
 
 
 def token_set_ratio(s1, s2, force_ascii=True, full_process=True):
